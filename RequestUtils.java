@@ -2,10 +2,22 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import javax.net.ssl.HttpsURLConnection;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+/**
+ * @author jackson
+ * @date 16/06/2015
+ */
 
 
 
@@ -17,7 +29,7 @@ public class RequestUtils {
     }
     
     static {
-	    //Remember - for testing only
+	    //Remember - for local testing only
 	    javax.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(
 	    new javax.net.ssl.HostnameVerifier(){
 
@@ -30,18 +42,56 @@ public class RequestUtils {
 	        }
 	    });
 	} 
-
+	
+	//If needs to disable cert check on a server(not localhost) - just call this function after openConnection
+	 public static void disableSSLCertificateChecking() 
+    {
+        TrustManager[] trustAllCerts = new TrustManager[] 
+        { 
+            new    X509TrustManager() 
+            {
+                public X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+                @Override
+                public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+                    // Not implemented
+                }
+                @Override
+                public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+                    // Not implemented
+                }            
+            } 
+    
+        };
+ 
+        try {
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(null, trustAllCerts, new
+            java.security.SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        } catch (KeyManagementException e) {
+                e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+        }    
+ 
+    }   
+	
+	
+	
     private static String sendPost(String url, String urlParameters, String basicAuth) {
         URL urlURI = null;
         try {
          urlURI = new URL(url);
         } catch (MalformedURLException e) {
-         // TODO Auto-generated catch block
+         
          e.printStackTrace();
         }
         HttpURLConnection connection = null;
         try {
          connection = (HttpURLConnection) urlURI.openConnection();
+		 //disableSSLCertificateChecking();
          connection.setRequestMethod("POST");
          if (basicAuth != "") {
                connection.setRequestProperty("Authorization",
@@ -78,7 +128,7 @@ public class RequestUtils {
                connection.disconnect();
                return result.toString();
          } catch (IOException e) {
-               // TODO Auto-generated catch block
+              
                e.printStackTrace();
                return "";
          }
@@ -89,7 +139,8 @@ public class RequestUtils {
         	 	               
                URL obj = new URL(url);
                HttpsURLConnection connection = (HttpsURLConnection)
-               obj.openConnection();               
+               obj.openConnection();     
+			   //disableSSLCertificateChecking();			   
                connection.setRequestMethod("GET");
                int responseCode = connection.getResponseCode();
                System.out.println("Response Code : " + responseCode);
