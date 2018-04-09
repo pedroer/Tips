@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<title>Display PDF</title>
+<style>object, iframe { border: 1px dotted red; }</style>
+<h1>Ok - object tag with blob url</h1>
+<object id=o2 type="application/pdf" width=500px height=500px></object>
+
+<h1>OK - window.open PDF</h1>
+<button>Open</button>
+
+<h1>OK - iframe PDF/h1>
+<iframe width=100px height=100px></iframe>
+
+<script>
+var global = null;
+var request = new XMLHttpRequest();
+request.open('GET', 'https://URL', true);
+request.responseType = 'blob';
+request.onload = function() {
+    var reader = new FileReader();
+    reader.readAsDataURL(request.response);
+    reader.onload =  function(e){
+	global = reader.result;
+var blob = new Blob([(request.response)], {type: 'application/pdf'});
+
+var bloburl = URL.createObjectURL(blob);
+document.querySelector('#o2').data = bloburl;
+
+document.querySelector('iframe').src = bloburl;
+
+document.querySelector('button').addEventListener('click', e => {
+  window.open(bloburl);
+});
+};
+};
+request.send();
+
+
+</script>
