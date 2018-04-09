@@ -1,0 +1,1 @@
+<connector name="http" protocol="HTTP/1.1" scheme="http" socket-binding="http" redirect-port="443" max-connections="3000"/>
