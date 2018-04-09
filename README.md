@@ -1,2 +1,2 @@
 # Tips
-Solution to "No name matching localhost found" or to other adress that you need to test.
+Solution to "No name matching localhost found" or to other address that you need to test.
