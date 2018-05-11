@@ -1,0 +1,28 @@
+<datasources>
+<datasource jta="false" jndi-name="java:/${JNDI}" pool-name="${POOL}" enabled="true" use-java-context="true">
+                    <connection-url>${URL_BANCO}</connection-url>
+                    <driver>oracleDriver</driver>
+                    <new-connection-sql>
+                        Begin
+							execute immediate('ALTER SESSION SET NLS_COMP=LINGUISTIC');
+							execute immediate('ALTER SESSION SET NLS_SORT=BINARY_AI');
+						end;
+                    </new-connection-sql>
+                    <pool>
+                        <min-pool-size>0</min-pool-size>
+                        <max-pool-size>20</max-pool-size>
+                        <prefill>true</prefill>
+                    </pool>
+                    <security>
+                        <user-name>${USER}</user-name>
+                        <password>${PASSWORD}</password>
+                    </security>
+                    <validation>
+                        <validate-on-match>false</validate-on-match>
+                        <background-validation>false</background-validation>
+                    </validation>
+                    <statement>
+                        <share-prepared-statements>false</share-prepared-statements>
+                    </statement>
+                </datasource>		
+</datasources>
