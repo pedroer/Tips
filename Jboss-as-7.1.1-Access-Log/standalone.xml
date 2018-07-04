@@ -1,0 +1,13 @@
+<subsystem xmlns="urn:jboss:domain:web:1.1" default-virtual-server="default-host" native="false">
+            <connector name="http" protocol="HTTP/1.1" scheme="http" socket-binding="http" redirect-port="8443"/>
+            <connector name="https" protocol="HTTP/1.1" scheme="https" socket-binding="https" secure="true">
+                <ssl name="https" key-alias="nameAliasHere" password="passwordHere" certificate-key-file="${jboss.home.dir}/cert/cert.jks" protocol="TLSv1"/>
+            </connector>
+            <virtual-server name="default-host" enable-welcome-root="false">
+                <alias name="localhost"/>
+                <alias name="example.com"/>
+                <access-log pattern="%{Authorization}i %{permissoes}i %{PERMISSOES}i %{Referer}i %m %U %b %s">
+                    <directory path="."/>
+                </access-log>
+            </virtual-server>
+</subsystem>
