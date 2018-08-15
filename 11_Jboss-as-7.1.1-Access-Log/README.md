@@ -1,4 +1,4 @@
-# Tips #10
+# Tips #11
 Solution to add access log like apache's to JBOSS AS 7.1.1.
 
 Here i'm printing the headers with the name Authorization, permissoes and PERMISSOES,  Method Called , Request Method and Request URL path, Bytes Sent and HTTP Status code..        

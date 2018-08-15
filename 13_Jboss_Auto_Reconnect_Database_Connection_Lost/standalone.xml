@@ -1,0 +1,19 @@
+<datasource jta="false" jndi-name="java:jboss/oracle-application-jndi" pool-name="PoolOracleName" enabled="true" use-java-context="true">
+                    <connection-url>jdbc:oracle:thin:@oracleDatabase:1521:oracleSID</connection-url>
+                    <driver>oracleDriver</driver>
+                    <pool>
+                        <min-pool-size>0</min-pool-size>
+                        <max-pool-size>20</max-pool-size>
+                        <prefill>true</prefill>
+                    </pool>
+                    <security>
+                        <user-name>ORACLEUSER</user-name>
+                        <password>oraclePassword</password>
+                    </security>
+                    <validation>
+                        <check-valid-connection-sql>select 1 from dual</check-valid-connection-sql>
+                        <validate-on-match>false</validate-on-match>
+                        <background-validation>true</background-validation>
+                        <background-validation-millis>10000</background-validation-millis>
+                    </validation>                    
+</datasource>
