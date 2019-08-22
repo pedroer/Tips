@@ -34,6 +34,16 @@ do
 
     result=1
   fi
+  
+  email=`git log --format='%ae' -1 $commit`  
+  checkRegisteredEmail=`cat listRegisteredEmails.txt |grep $email`
+  if [ ${#checkRegisteredEmail} -eq 0 ] ; then
+    echo "####################################################################################"
+    echo "Error: Email Not Present at GITLAB"
+    echo "Update your Email to the same used at GITLAB Interface"
+    echo "####################################################################################"    
+    result=1
+  fi
 done
 
 exit $result
