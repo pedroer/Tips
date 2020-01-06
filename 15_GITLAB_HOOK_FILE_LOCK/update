@@ -1,0 +1,30 @@
+#!/bin/bash
+
+refname="$1"
+oldrev="$2"
+newrev="$3"
+result=0
+
+if ! [ "$oldrev" = "0000000000000000000000000000000000000000" ] ; then
+    excludes=( ^$oldrev )
+else
+    excludes=( $(git for-each-ref --format '^%(refname:short)' refs/heads/) )
+fi
+
+commits=`git rev-list $newrev "${excludes[@]}"`
+
+for commit in $commits
+do
+  fileci=`git show --pretty="" --name-only $commit|grep gitlab-ci`
+  if [ "$fileci" != "" ] ; then
+    echo "####################################################################################"
+    echo "Error: THE FILE GITLAB-CI.YML MUST NOT BE UPDATED !!"
+    echo "CHECK WITH THE GITLAB ADMINISTRATOR IF YOU WISH SO"
+    echo "####################################################################################"
+    result=1
+  fi
+ 
+done
+
+exit $result
+
